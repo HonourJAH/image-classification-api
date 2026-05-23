@@ -1,0 +1,35 @@
+name: ML API CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t image-classification-api .
+
+      - name: Run container
+        run: docker run -d -p 8000:8000 --name image-classification-api image-classification-api
+      - name: Wait for API startup
+        run: sleep 10
+
+      - name: Check container status
+        run: docker ps
+
+      - name: Health check with curl
+        run: |
+          curl --fail http://localhost:8000/health
+
+      - name: Show logs
+        if: failure()
+        run: docker logs image-classification-api
