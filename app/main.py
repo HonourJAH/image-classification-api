@@ -24,7 +24,13 @@ async def predict(file: UploadFile):
 
     contents = await file.read()
 
-    image = Image.open(io.BytesIO(contents)).convert("RGB")
+    try:
+        image = Image.open(io.BytesIO(contents)).convert("RGB")
+    except Exception:
+        raise HTTPException(
+            status_code=400,
+            detail="Could not read image — file may be corrupt or empty",
+        )
 
     tensor = preprocess(image)
 
