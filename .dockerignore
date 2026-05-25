@@ -1,5 +1,14 @@
-.git
-venv
+model.joblib
 __pycache__
 *.pyc
-model.joblib
+*.pyo
+.git
+.gitignore
+.env
+venv/
+*.egg-info
+dist/
+build/
+test/
+*.md
+.pytest_cache
